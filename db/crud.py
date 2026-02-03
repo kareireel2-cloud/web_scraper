@@ -1,13 +1,13 @@
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from service.main import get_data_from_url
+from service.main import web_scraping_url
 from . import models
 
 async def insert_new_data(session: AsyncSession,
         start_url:str,
         depth:int,
         max_concurency:int):
-    data = await get_data_from_url(url=start_url, depth = depth, max_concurency = max_concurency)
+    data = await web_scraping_url(url=start_url, depth = depth, max_concurency = max_concurency)
     objs = [
         models.UrlData(
             url = url,
@@ -15,20 +15,25 @@ async def insert_new_data(session: AsyncSession,
             html_body = html
         ) for (url, title, html) in data
     ]
+    lenght = len(objs)
     session.add_all(objs)
     await session.commit()
+    return lenght 
 
-
+async def get_list_of_urls_and_titles(session: AsyncSession):
+    stmt = select(models.UrlData.url ,models.UrlData.title)
+    result = await session.execute(stmt)
+    return [{'url':row[0], 'title':row[1]} for row in result.all()]
 
 async def get_html_by_title(session: AsyncSession, title: str):
     stmt = select(models.UrlData).where(models.UrlData.title == title)
     result = await session.scalars(stmt)
-    return result.first()
+    return result.all()
 
-async def get_obj_by_url(session: AsyncSession, url:str):
+async def get_html_by_url(session: AsyncSession, url:str):
     stmt = select(models.UrlData).where(models.UrlData.url == url)
-    result = await session.scalars(stmt)
-    return result.first()
+    result = await session.execute(stmt)
+    return result.scalar()
 
 
 

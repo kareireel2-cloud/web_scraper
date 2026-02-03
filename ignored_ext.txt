@@ -1,0 +1,15 @@
+.pdf
+.jpg
+.jpeg
+.png
+.gif
+.svg
+.zip
+.rar
+.7z
+.exe
+.mp3
+.mp4
+.css
+.js
+.xml

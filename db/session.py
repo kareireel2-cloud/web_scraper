@@ -10,12 +10,9 @@ class Base(DeclarativeBase):
 
 async_engine = create_async_engine(settings.DATABASE_URL_asyncpg)
 
-Async_Session = async_sessionmaker(bind=async_engine, autoflush=False, autocommit=False)
+AsyncSession = async_sessionmaker(bind=async_engine, autoflush=False, autocommit=False)
 
+async def get_db():
+    async with AsyncSession() as session:
+        yield session
 
-def get_db():
-    db = Async_Session()
-    try:
-        yield db
-    finally:
-        db.close()
