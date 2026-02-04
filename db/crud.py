@@ -1,4 +1,4 @@
-from sqlalchemy import insert, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from service.main import web_scraping_url
 from . import models
@@ -34,10 +34,3 @@ async def get_html_by_url(session: AsyncSession, url:str):
     stmt = select(models.UrlData).where(models.UrlData.url == url)
     result = await session.execute(stmt)
     return result.scalar()
-
-
-
-# def get_data_from_url(session: Session, url: str) -> str:
-#     scrapper = AsyncScrapper(max_concurrency=10)
-#     data = scrapper.fetch_page(url, depth=2)
-#     return data

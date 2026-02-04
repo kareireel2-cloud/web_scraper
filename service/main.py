@@ -1,12 +1,8 @@
-from datetime import datetime
 import asyncio
 import httpx
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from typing import List, Set
-
-
-
 
 class AsyncScrapper:
     def __init__(self, max_concurrency: int):
@@ -52,8 +48,6 @@ class AsyncScrapper:
                         valid_urls.append(clean_url)
                 return valid_urls
             except Exception as e:
-                # with open('logs.txt','w') as file:
-                #     file.write(f'{url}: {e}')
                 return []
 
 
@@ -66,10 +60,7 @@ class AsyncScrapper:
             except Exception as e:
                 return url, ''
         
-    def is_valid_url(self, url: str) -> bool:
-        """Проверка: стоит ли вообще переходить по этой ссылке"""
-        
-        
+    def is_valid_url(self, url: str) -> bool:       
         
         # Проверка на расширение, если нужно убрать или добавить,список в файле igroned_ext.txt
         if any(url.endswith(ext) for ext in self.blocked_extensions):
@@ -85,12 +76,11 @@ class AsyncScrapper:
         current_level_urls = [start_url]
         all_found_urls = {start_url}
 
-        for d in range(depth):
+        for _ in range(depth):
 
             tasks = [self.get_abs_url(url) for url in current_level_urls]
             results = await asyncio.gather(*tasks)
-            
-        
+                    
             next_level_urls = []
             for urls in results:
                 for u in urls:
@@ -101,7 +91,6 @@ class AsyncScrapper:
             current_level_urls = next_level_urls
             if not current_level_urls:
                 break
-
 
         data: list[tuple[str, str, str]] = []
         tasks = [self.fetch_html(url) for url in current_level_urls]
@@ -115,9 +104,6 @@ class AsyncScrapper:
 
         return data
 
-
-
-# url = 'https://pythonworld.ru/tipy-dannyx-v-python/isklyucheniya-v-python-konstrukciya-try-except-dlya-obrabotki-isklyuchenij.html'
 async def web_scraping_url(url,max_concurency,depth):
     scraper = AsyncScrapper(max_concurrency=max_concurency) 
     try:
