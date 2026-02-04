@@ -50,11 +50,11 @@
 
 1. Создание файла окружения:
 Перед началом работы создайте файл ".env" c следующими параметрами:
-    -DB_HOST=db
-    -DB_PORT=5432
-    -DB_USER='ВАШ ЮЗЕРНЕЙМ В БД'
-    -DB_PASS='ВАШ ПАРОЛЬ В БД'
-    -DB_NAME=web_scraper
+    - DB_HOST=db
+    - DB_PORT=5432
+    - DB_USER='ВАШ ЮЗЕРНЕЙМ В БД'
+    - DB_PASS='ВАШ ПАРОЛЬ В БД'
+    - DB_NAME=web_scraper
 
 2. Сборка образа:
 docker-compose build
